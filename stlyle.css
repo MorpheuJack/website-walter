@@ -1,0 +1,289 @@
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    /* ===== INÍCIO DO CSS GERAL ===== */   
+        /* Reset básico */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-bg: #0a0a0a; /* Cor de fundo primária */
+            --secondary-bg: #111111; /* Cor de fundo secundária */
+            --accent-purple: #8b5cf6; /* Roxo */    
+            --accent-cyan: #06b6d4; /* Ciano */
+            --accent-pink: #ec4899; /* Rosa */
+            --text-primary: #ffffff; /* Cor do texto primário */
+            --text-secondary: #a1a1aa; /* Cor do texto secundário */
+            --text-muted: #71717a; /* Cor do texto menos importante */
+            --glass-bg: rgba(255, 255, 255, 0.03); /* Cor de fundo estilo vidro */
+            --glass-border: rgba(255, 255, 255, 0.1); /* Cor da borda estilo vidro */
+            --gradient-1: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%); /* Gradiente principal */
+            --gradient-2: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); /* Gradiente secundário */
+            --gradient-3: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%); /* Gradiente terciário */
+            --lerp-0: 1; /* === sin(90deg) */ /* Valores de interpolação para o efeito de hover */
+            --lerp-1: calc(sin(50deg)); 
+            --lerp-2: calc(sin(45deg));
+            --lerp-3: calc(sin(35deg));
+            --lerp-4: calc(sin(25deg));
+            --lerp-5: calc(sin(15deg));
+        }
+/* Define as variáveis de cor e gradiente para o tema */
+        section { display: grid; gap: 4rem; align-items: center; justify-content: center; }/* Define o layout da seção com grid, espaçamento e alinhamento */
+/* todas divcom section p terão o mesmo estilo */
+        section p { margin: 0; font-size: 2.25rem; color: hsl(0 0% 40%); text-align: center; background: linear-gradient(hsl(0 0% 80%), hsl(0 0% 50%)); color: transparent; background-clip: text; }/* Define o estilo do parágrafo com tamanho de fonte, cor, alinhamento e gradiente */
+/* o code é o elemento que contém o código que será animado */
+        .code { font-size: 3rem; display: flex; flex-wrap: nowrap; color: hsl(0 0% 100%); border-radius: 1rem; background: hsl(252, 28%, 17%); justify-content: center; box-shadow: 0 1px hsl(0 0% 100% / 0.25) inset; }/* Define o estilo do código com tamanho de fonte, cor, borda, fundo e sombra */
+/* o code:hover serve para adicionar um efeito de hover ao código */
+        .code:hover { cursor: grab; }/* Adiciona cursor de mão ao passar o mouse sobre o código */
+
+
+
+/* todos .digit são os dígitos que serão animados na div com a classe .code */
+.digit { display: flex; height: 100%; padding: 5.5rem 1rem; }/* Define o layout do dígito com flexbox e espaçamento */
+
+.digit:focus-visible { outline-color: hsl(0 0% 50% / 0.25); outline-offset: 1rem; }/* Adiciona um contorno ao focar no dígito */
+
+.digit span { scale: calc(var(--active, 0) + 0.5); filter: blur(calc((1 - var(--active, 0)) * 1rem)); transition: scale calc(((1 - var(--active, 0)) + 0.2) * 1s), filter calc(((1 - var(--active, 0)) + 0.2) * 1s); } /* Aplica uma escala e desfoque ao dígito com base no valor ativo */
+
+ul { padding: 0; margin: 0; }/* Remove padding e margem do ul */
+
+.digit:first-of-type { padding-left: 5rem; } /* Adiciona espaçamento à esquerda do primeiro dígito */
+
+.digit:last-of-type { padding-right: 5rem; }/* Adiciona espaçamento à direita do último dígito */
+
+.digit:is(:hover, :focus-visible) { --active: var(--lerp-0); }/* Define o valor ativo para o dígito em hover ou foco visível */
+
+.digit:is(:hover, :focus-visible) + .digit, .digit:has(+ .digit:is(:hover, :focus-visible)) { --active: var(--lerp-1); }
+
+.digit:is(:hover, :focus-visible) + .digit + .digit, .digit:has(+ .digit + .digit:is(:hover, :focus-visible)) { --active: var(--lerp-2); }
+
+.digit:is(:hover, :focus-visible) + .digit + .digit + .digit, .digit:has(+ .digit + .digit + .digit:is(:hover, :focus-visible)) { --active: var(--lerp-3); }
+
+.digit:is(:hover, :focus-visible) + .digit + .digit + .digit + .digit, .digit:has(+ .digit + .digit + .digit + .digit:is(:hover, :focus-visible)) { --active: var(--lerp-4); }
+
+.digit:is(:hover, :focus-visible) + .digit + .digit + .digit + .digit + .digit, .digit:has(+ .digit + .digit + .digit + .digit + .digit:is(:hover, :focus-visible)) { --active: var(--lerp-5); }
+        
+        /* Efeito de fade-in para os elementos */
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* CSS do html*/
+html { scroll-behavior: smooth; } /* Suaviza o scroll */
+
+/* Estilo geral do corpo */
+body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-bg); color: var(--text-primary);
+            overflow-x: hidden; line-height: 1.6; font-weight: 400;
+        }
+
+        /* ===== INÍCIO DO CSS DE ANIMAÇÃO DE FUNDO ===== */
+
+body::after { 
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: var(--mesh-gradient);
+            background-size: 200% 200%;
+            animation: mesh-move 20s ease-in-out infinite;
+            z-index: -2; /* Atrás de tudo */
+        }
+        /* Mesh gradient para o fundo */
+        /*cria um elemento visual antes do conteúdo principal*/
+ body::before { 
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1; /* Entre o fundo mesh e o conteúdo */
+            background: radial-gradient(
+                circle 1900px at var(--x, 50%) var(--y, 50%),
+                rgba(139, 92, 246, 0.15), 
+                transparent 80%
+            );
+        }
+
+        /* ===== FIM DO CSS DE ANIMAÇÃO DE FUNDO ===== */
+
+/* ===== FIM DO CSS GERAL ===== */
+
+
+/* ===== INÍCIO MENU SUPERIOR ===== */
+        
+        .header { position: fixed; top: 110;  width: 100%;  background-color: #15111ed5; backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); z-index: 1000; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); } 
+        .header.hide { transform: translateY(-100%); }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; padding: 20px 40px; }
+        .logo { font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #ec4899 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; letter-spacing: -0.02em; }
+        
+/* Menu de navegação */
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .nav-menu { display: flex; list-style: none; gap: 32px; }
+        .nav-menu a { color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.3s ease; position: relative; }
+        .nav-menu a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--gradient-1); transition: width 0.3s ease; }
+        .nav-menu a:hover { color: var(--text-primary); }
+        .nav-menu a:hover::after { width: 100%; }
+
+/* Botão de chamada para ação MENU */
+        
+        .cta-button { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-primary); padding: 12px 24px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; backdrop-filter: blur(20px); position: relative; overflow: hidden; }
+        .cta-button::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--gradient-1); transition: left 0.5s ease; z-index: -1; }
+        .cta-button:hover::before { left: 0; }
+        .cta-button:hover { transform: translateY(-1px); box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3); border-color: transparent; }
+        .mobile-menu-button { display: none; background: none; border: none; color: var(--text-primary); font-size: 28px; cursor: pointer; z-index: 1001; }
+
+/* FIM BOTÃO DE CHAMADA PARA AÇÃO MENU */
+
+/* ===== FIM DO MENU SUPERIOR ===== */
+
+/* ===== INÍCIO DA SEÇÃO HERO ===== */
+    
+.hero {
+    min-height: 110vh;
+    display: flex; /* Flexbox para centralizar o conteúdo */
+    align-items: center; /* Alinha verticalmente ao centro */
+    position: relative; /* Permite posicionar elementos filhos */
+    background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%), /* Gradiente radial para o fundo */
+                url('./images/bgTopoSemVideo.webp'); /* Caminho para a imagem */
+    background-size: cover; /* Ajusta a imagem para cobrir toda a área */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita repetição da imagem */
+    
+} 
+        .hero-content { max-width: 1400px; margin: 0 auto; padding: 0 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; position: relative; z-index: 2; } /* Grid para organizar o conteúdo */
+        .hero-text h1 { font-size: 45px; font-weight: 800; line-height: 1.1; margin-bottom: 25px; margin-left: 30px; margin-right: -115px; } /* Título principal */
+        .hero-text .gradient-text { background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: inline-block;  } /* Texto com gradiente */
+        .hero-text .subtitle { text-align: left ;font-size: 20px; color: var(--text-secondary); margin-bottom: 32px; font-weight: 400; line-height: 1.6; margin-left: 30px; margin-right: -5px;} /* Subtítulo */
+        .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; margin-left: 30px; } /* Botões de ação */
+        .btn-primary { background: var(--gradient-1); color: white; padding: 16px 32px; border: none; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-decoration: none; display: inline-flex; align-items: center; gap: 10px; } /* Botão primário */
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 2 8px 80px rgba(138, 92, 246, 0.175); } /* Efeito de hover no botão primário */
+        .btn-secondary { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-primary); padding: 16px 32px; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer; transition: all 0.3s ease; text-decoration: none; backdrop-filter: blur(20px); } /* Botão secundário */
+        .btn-secondary:hover { background: var(--glass-border); transform: translateY(-2px); } /* Efeito de hover no botão secundário */
+       
+    /* Cartões flutuantes e ícone de cérebro AI */
+        .hero-visual { position: relative; height: 500px; display: flex; align-items: center; justify-content: center; }
+        .floating-cards { position: relative; width: 100%; height: 100%; } /* Container para os cartões flutuantes */
+        .floating-card { position: absolute; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 24px; backdrop-filter: blur(20px); transition: all 0.3s ease; } /* Cartões flutuantes */
+        .card-icon { font-size: 24px; margin-bottom: 8px; } /* Ícone do cartão */
+        .card-text { font-size: 12px; color: var(--text-secondary); } /* Texto do cartão */
+
+    /* Animações de flutuação dos cartões */
+        .floating-card:nth-child(1) { top: 13%; left: 10%; animation: float-1 6s ease-in-out infinite; }
+        .floating-card:nth-child(2) { top: 13%; right: 15%; animation: float-2 8s ease-in-out infinite; }
+        .floating-card:nth-child(3) { bottom: 20%; left: 20%; animation: float-3 7s ease-in-out infinite; }
+        @keyframes float-1 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+        @keyframes float-2 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        @keyframes float-3 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-25px); } }
+    /* Ícone de cérebro AI */
+        .ai-brain { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; background: var(--gradient-1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 80px; animation: pulse-glow 3s ease-in-out infinite; box-shadow: 0 0 60px rgba(139, 92, 246, 0.3); }
+        @keyframes pulse-glow { 0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 60px rgba(139, 92, 246, 0.3); } 50% { transform: translate(-50%, -50%) scale(1.05); box-shadow: 0 0 80px rgba(139, 92, 246, 0.5); } }
+        
+    /* ===== FIM DA SEÇÃO HERO ===== */
+
+    /* ===== INÍCIO DA SEÇÃO DE ESTATÍSTICAS ===== */
+
+        .section { padding: 120px 40px; position: relative; }
+        .section-header { text-align: center; max-width: 800px; margin: 0 auto 80px; }
+        .section-title { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em; }
+        .section-subtitle { font-size: 1.125rem; color: var(--text-secondary); font-weight: 400; }
+        .features-container { max-width: 1400px; margin: 0 auto; }
+
+        .stats { padding: 80px 0; background: var(--glass-bg); backdrop-filter: blur(20px); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
+        .stats-container { max-width: 1200px; margin: 0 auto; padding: 0 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: center; }
+        .stat-item h3 { font-size: 2.5rem; font-weight: 800; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
+        .stat-item p { color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; }
+        
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; }
+        .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px; backdrop-filter: blur(20px); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
+        .feature-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--gradient-1); opacity: 0; transition: opacity 0.3s ease; z-index: -1; }
+        .feature-card:hover::before { opacity: 0.05; }
+        .feature-card:hover { transform: translateY(-8px); border-color: rgba(139, 92, 246, 0.3); box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2); }
+        .feature-icon { width: 60px; height: 60px; background: var(--gradient-1); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 24px; transition: all 0.3s ease; }
+        .feature-card:hover .feature-icon { transform: scale(1.1); }
+        .feature-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary); }
+.feature-card p { color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6; }
+/* ===== FIM DA SEÇÃO DE ESTATÍSTICAS ===== */
+
+
+/* ===== INÍCIO DA SEÇÃO FAQ  ===== */
+
+        /* SEÇÃO FAQ */
+        .faq-section { padding: 120px 0; background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%); position: relative; }
+        .faq-header { text-align: center; margin-bottom: 50px; }
+        .faq-header h1 { font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em; }
+        .faq-header p { font-size: 1.125rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+        /* CONTAINER PRINCIPAL */
+        .faq-container { width: 100%; max-width: 700px; padding: 2rem; margin: 0 auto; margin-top: 50px; /* Espaço para o cabeçalho fixo */ margin-bottom: 50px; /* Espaço para o rodapé */ transition: all 0.3s ease; scrollbar-color: var(--glass-border) transparent; }
+
+
+
+/* ACORDION */
+.faq-accordion { display: flex; flex-direction: column; gap: 1rem; }
+
+.faq-item { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: all 0.3s ease; overflow: hidden; }
+
+.faq-item:hover { box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); border-color: rgba(139, 92, 246, 0.3); }
+
+.faq-question { width: 100%; background: transparent; border: none; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; text-align: left; color: var(--text-primary); font-size: 1.1rem; font-weight: 500; font-family: inherit; }
+
+.faq-question i { color: var(--text-secondary); transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+
+.faq-question.active i { transform: rotate(180deg); color: var(--accent-purple); }
+
+.faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.22, 1, 0.36, 1), padding 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+
+.faq-answer p { padding: 0 1.5rem 1.5rem 1.5rem; color: var(--text-secondary); line-height: 1.6; }
+
+.faq-answer.open { max-height: 200px; }
+
+
+        
+/* ===== FIM DA SEÇÃO FAQ ===== */
+
+/* ===== INÍCIO DA SEÇÃO DE CHAMADA PARA AÇÃO (CTA) ===== */
+
+        .cta-section { padding: 120px 0; background: radial-gradient(ellipse at center, rgba(236, 72, 153, 0.15) 0%, transparent 70%); text-align: center; position: relative; }
+        .cta-container { max-width: 800px; margin: 0 auto; padding: 0 40px; }
+        .cta-section h2 { font-size: clamp(2rem, 4vw, 2.5rem); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em; }
+        .cta-section p { font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 40px; }
+        .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+        .footer { background-color: #1A1428; padding: 80px 0 40px; border-top: 1px solid var(--glass-border); }
+        .footer-container { max-width: 1400px; margin: 0 auto; padding: 0 40px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; }
+        .footer-brand h3 { font-size: 1.25rem; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 16px; }
+        .footer-brand p { color: var(--text-muted); font-size: 0.875rem; line-height: 1.6; margin-bottom: 24px; }
+        .social-links { display: flex; gap: 12px; }
+        .social-link { width: 40px; height: 40px; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s ease; backdrop-filter: blur(20px); }
+        .social-link svg { stroke: var(--text-secondary); transition: stroke 0.3s ease; }
+        .social-link:hover { background: var(--gradient-1); }
+        .social-link:hover svg { stroke: white; }
+        .footer-section h4 { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; }
+        .footer-section a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.875rem; margin-bottom: 8px; transition: color 0.3s ease; }
+        .footer-section a:hover { color: var(--text-primary); }
+        .footer-bottom { text-align: center; margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--glass-border); color: var(--text-muted); font-size: 0.875rem; }
+        
+
+
+        /* Estilos para tablets */
+        @media (max-width: 1024px) { 
+            .hero-content { grid-template-columns: 1fr; text-align: center; }
+            .hero-buttons { justify-content: center; }
+            .features-grid { grid-template-columns: 1fr; }
+            .footer-container { grid-template-columns: 1fr 1fr; gap: 40px; }
+        }
+        /* Estilos para dispositivos móveis */
+        @media (max-width: 768px) {
+            .nav-menu { position: fixed; flex-direction: column; top: 75px; left: 0; width: 100%; background: var(--primary-bg); padding: 20px 0; border-bottom: 1px solid var(--glass-border); display: none; }
+            .nav-menu.active { display: flex; text-align: center; }
+            .nav-menu li { width: 100%; padding: 10px 0; }
+            .cta-button { display: none; }
+            .mobile-menu-button { display: block; }
+            .hero-buttons, .cta-buttons { flex-direction: column; align-items: center; }
+            .stats-container { grid-template-columns: repeat(2, 1fr); }
+            .footer-container { grid-template-columns: 1fr; }
+        }
+/* ===== FIM DA SEÇÃO DE CHAMADA PARA AÇÃO (CTA) ===== */
+
